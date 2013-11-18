@@ -57,9 +57,7 @@ class GruntSetupCommand extends Command
             new Metafile\Grunt($this->config),
             new Metafile\Bower($this->config),
             new Metafile\Jshint($this->config),
-            new Metafile\Mocha($this->config),
             new Metafile\Assets($this->config),
-            new Metafile\Requirejs($this->config),
         );
     }
 
