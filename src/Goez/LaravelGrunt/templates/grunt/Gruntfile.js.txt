@@ -160,26 +160,6 @@ module.exports = function (grunt) {
                 ],
                 dest: 'public/assets'
             }
-        },
-        requirejs: {
-            dist: {
-                // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
-                options: {
-                    baseUrl: '{{ assets_path }}/scripts',
-                    optimize: 'none',
-                    preserveLicenseComments: false,
-                    useStrict: true,
-                    wrap: true
-                }
-            }
-        },
-        bower: {
-            options: {
-                exclude: [ 'modernizr', 'requirejs' ]
-            },
-            all: {
-                rjsConfig: '{{ assets_path }}/scripts/main.js'
-            }
         }
     });
 
