@@ -23,6 +23,27 @@ class Assets extends Metafile
     /**
      * @return array
      */
+    public function requirements()
+    {
+        return array(
+            'ruby' => array(
+                'command' => 'ruby -v',
+                'check'   => 'ruby',
+            ),
+            'gem' => array(
+                'command' => 'gem -v',
+                'check'   => '2',
+            ),
+            'compass' => array(
+                'command' => 'compass -v',
+                'check'   => 'Compass',
+            ),
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function ignoreFiles()
     {
         return array(

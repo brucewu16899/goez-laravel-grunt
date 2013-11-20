@@ -21,6 +21,10 @@ class Grunt extends Metafile
                 'command' => 'npm -v',
                 'check'   => '1.',
             ),
+            'grunt' => array(
+                'command' => 'grunt -V',
+                'check'   => 'grunt-cli',
+            ),
         );
     }
 
