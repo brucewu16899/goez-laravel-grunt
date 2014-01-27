@@ -52,16 +52,6 @@ module.exports = function (grunt) {
                 '{{ assets_path }}/test/spec/{,*/}*.js'
             ]
         },
-        modernizr: {
-            devFile: '{{ assets_path }}/vendor/modernizr/modernizr.js',
-            outputFile: 'public/{{ assets_path }}/vendor/modernizr/modernizr.js',
-            files: [
-                'public/{{ assets_path }}/scripts/{,*/}*.js',
-                'public/{{ assets_path }}/styles/{,*/}*.css',
-                '!public/{{ assets_path }}/vendor/*'
-            ],
-            uglify: true
-        },
         compass: {
             options: {
                 sassDir: '{{ assets_path }}/styles',
@@ -173,7 +163,6 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'autoprefixer',
-        'modernizr',
         'compass',
         'copy:dist'
     ]);
