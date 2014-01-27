@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/scripts',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: 'public/{{ assets_path }}/scripts',
                     ext: '.js'
                 }]
@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/test/spec',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: 'public/{{ assets_path }}/test/spec',
                     ext: '.js'
                 }]
@@ -47,20 +47,10 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '{{ assets_path }}/scripts/{,*/}*.js',
+                '{{ assets_path }}/scripts/**/*.js',
                 '!{{ assets_path }}/vendor/*',
-                '{{ assets_path }}/test/spec/{,*/}*.js'
+                '{{ assets_path }}/test/spec/**/*.js'
             ]
-        },
-        modernizr: {
-            devFile: '{{ assets_path }}/vendor/modernizr/modernizr.js',
-            outputFile: 'public/{{ assets_path }}/vendor/modernizr/modernizr.js',
-            files: [
-                'public/{{ assets_path }}/scripts/{,*/}*.js',
-                'public/{{ assets_path }}/styles/{,*/}*.css',
-                '!public/{{ assets_path }}/vendor/*'
-            ],
-            uglify: true
         },
         compass: {
             options: {
@@ -70,10 +60,12 @@ module.exports = function (grunt) {
                 imagesDir: 'public/{{ assets_path }}/images',
                 javascriptsDir: 'public/{{ assets_path }}/scripts',
                 fontsDir: 'public/{{ assets_path }}/styles/fonts',
-                importPath: '{{ assets_path }}/vendor',
                 httpImagesPath: '/{{ assets_path }}/images',
                 httpGeneratedImagesPath: '/{{ assets_path }}/images/out',
                 httpFontsPath: '/{{ assets_path }}/styles/fonts',
+                outputStyle: 'compressed',
+                noLineComments: true,
+                debugInfo: false,
                 relativeAssets: false,
                 assetCacheBuster: false
             },
@@ -97,7 +89,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/styles/',
-                    src: '{,*/}*.css',
+                    src: '**/*.css',
                     dest: 'public/{{ assets_path }}/styles/'
                 }]
             }
@@ -118,49 +110,71 @@ module.exports = function (grunt) {
         },
         watch: {
             coffee: {
-                files: [ '{{ assets_path }}/scripts/{,*/,*/*/,*/*/*/}*.coffee' ],
+                files: [ '{{ assets_path }}/scripts/**/*.coffee' ],
                 tasks: [ 'coffee:dist' ]
             },
             coffeeTest: {
-                files: [ '{{ assets_path }}/test/spec/{,*/,*/*/,*/*/*/}*.coffee' ],
+                files: [ '{{ assets_path }}/test/spec/**/*.coffee' ],
                 tasks: [ 'coffee:test' ]
             },
             compass: {
-                files: [ '{{ assets_path }}/styles/{,*/,*/*/,*/*/*/}*.{scss,sass}' ],
-                tasks: [ 'compass:server', 'autoprefixer' ]
+                files: [ '{{ assets_path }}/styles/**/*.{scss,sass}' ],
+                tasks: [ 'autoprefixer', 'compass:server' ]
             },
             styles: {
-                files: [ '{{ assets_path }}/styles/{,*/,*/*/,*/*/*/}*.css' ],
+                files: [ '{{ assets_path }}/styles/**/*.css' ],
                 tasks: [ 'copy:dist', 'autoprefixer' ]
             },
             scripts: {
-                files: [ '{{ assets_path }}/scripts/{,*/,*/*/,*/*/*/}*.js' ],
+                files: [ '{{ assets_path }}/scripts/**/*.js' ],
                 tasks: [ 'jshint', 'copy:dist' ]
+            },
+            images: {
+                files: [ '{{ assets_path }}/images/**/*.{png,jpg,jpeg,gif}' ],
+                tasks: [ 'copy:dist' ]
             },
             livereload: {
                 options: {
                     livereload: true
                 },
-                files: [
+                files: [ // Don't replace "{,*/}" with "/**/" in livereload
                     'app/views/{,*/}*.php',
-                    'public/{{ assets_path }}/{,*/}*.*'
+                    'public/{{ assets_path }}/{,*/}/',
+                    'public/{{ assets_path }}/{,*/}/*.*'
                 ]
+            }
+        },
+        uglify: {
+            dist: {
+                files: [{
+                    src: 'public/{{ assets_path }}/scripts/**/*.js',
+                    dest: 'public/{{ assets_path }}/scripts/',
+                    expand: true,
+                    flatten: true,
+                    ext: '.js'
+                }]
             }
         },
         copy: {
             dist: {
                 expand: true,
                 dot: true,
-                cwd: 'assets/',
+                cwd: '{{ assets_path }}/',
                 src: [
-                    'styles/{,*/}*.css',
-                    'scripts/{,*/}*.js',
-                    'images/{,*/}*.*'
+                    'styles/**/*.css',
+                    'scripts/**/*.js',
+                    'images/**/*.*'
                 ],
                 dest: 'public/assets'
             }
         }
     });
+
+    grunt.registerTask('live', [
+        'jshint',
+        'build',
+        'watch'
+    ]);
 
     grunt.registerTask('server', [
         'jshint',
@@ -172,13 +186,13 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'autoprefixer',
-        'modernizr',
         'compass',
         'copy:dist'
     ]);
 
     grunt.registerTask('default', [
         'jshint',
-        'build'
+        'build',
+        'uglify'
     ]);
 };
