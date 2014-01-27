@@ -60,10 +60,12 @@ module.exports = function (grunt) {
                 imagesDir: 'public/{{ assets_path }}/images',
                 javascriptsDir: 'public/{{ assets_path }}/scripts',
                 fontsDir: 'public/{{ assets_path }}/styles/fonts',
-                importPath: '{{ assets_path }}/vendor',
                 httpImagesPath: '/{{ assets_path }}/images',
                 httpGeneratedImagesPath: '/{{ assets_path }}/images/out',
                 httpFontsPath: '/{{ assets_path }}/styles/fonts',
+                outputStyle: 'compressed',
+                noLineComments: true,
+                debugInfo: false,
                 relativeAssets: false,
                 assetCacheBuster: false
             },
