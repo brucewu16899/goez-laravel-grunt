@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/scripts',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: 'public/{{ assets_path }}/scripts',
                     ext: '.js'
                 }]
@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/test/spec',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: 'public/{{ assets_path }}/test/spec',
                     ext: '.js'
                 }]
@@ -47,9 +47,9 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '{{ assets_path }}/scripts/{,*/}*.js',
+                '{{ assets_path }}/scripts/**/*.js',
                 '!{{ assets_path }}/vendor/*',
-                '{{ assets_path }}/test/spec/{,*/}*.js'
+                '{{ assets_path }}/test/spec/**/*.js'
             ]
         },
         compass: {
@@ -87,7 +87,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '{{ assets_path }}/styles/',
-                    src: '{,*/}*.css',
+                    src: '**/*.css',
                     dest: 'public/{{ assets_path }}/styles/'
                 }]
             }
@@ -108,32 +108,37 @@ module.exports = function (grunt) {
         },
         watch: {
             coffee: {
-                files: [ '{{ assets_path }}/scripts/{,*/}*.coffee' ],
+                files: [ '{{ assets_path }}/scripts/**/*.coffee' ],
                 tasks: [ 'coffee:dist' ]
             },
             coffeeTest: {
-                files: [ '{{ assets_path }}/test/spec/{,*/}*.coffee' ],
+                files: [ '{{ assets_path }}/test/spec/**/*.coffee' ],
                 tasks: [ 'coffee:test' ]
             },
             compass: {
-                files: [ '{{ assets_path }}/styles/{,*/}*.{scss,sass}' ],
-                tasks: [ 'compass:server', 'autoprefixer' ]
+                files: [ '{{ assets_path }}/styles/**/*.{scss,sass}' ],
+                tasks: [ 'autoprefixer', 'compass:server' ]
             },
             styles: {
-                files: [ '{{ assets_path }}/styles/{,*/}*.css' ],
+                files: [ '{{ assets_path }}/styles/**/*.css' ],
                 tasks: [ 'copy:dist', 'autoprefixer' ]
             },
             scripts: {
-                files: [ '{{ assets_path }}/scripts/{,*/}*.js' ],
+                files: [ '{{ assets_path }}/scripts/**/*.js' ],
                 tasks: [ 'jshint', 'copy:dist' ]
+            },
+            images: {
+                files: [ '{{ assets_path }}/images/**/*.{png,jpg,jpeg,gif}' ],
+                tasks: [ 'copy:dist' ]
             },
             livereload: {
                 options: {
                     livereload: true
                 },
-                files: [
+                files: [ // Don't replace "{,*/}" with "/**/" in livereload
                     'app/views/{,*/}*.php',
-                    'public/assets/{,*/}*.*'
+                    'public/{{ assets_path }}/{,*/}/',
+                    'public/{{ assets_path }}/{,*/}/*.*'
                 ]
             }
         },
@@ -141,12 +146,11 @@ module.exports = function (grunt) {
             dist: {
                 expand: true,
                 dot: true,
-                cwd: 'assets',
+                cwd: '{{ assets_path }}/',
                 src: [
-                    'styles/{,*/}*.css',
-                    'scripts/{,*/}*.js',
-                    'images/{,*/}*.*',
-                    'vendor/requirejs/require.js'
+                    'styles/**/*.css',
+                    'scripts/**/*.js',
+                    'images/**/*.*'
                 ],
                 dest: 'public/assets'
             }
