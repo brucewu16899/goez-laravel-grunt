@@ -142,6 +142,17 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        uglify: {
+            dist: {
+                files: [{
+                    src: 'public/{{ assets_path }}/scripts/**/*.js',
+                    dest: 'public/{{ assets_path }}/scripts/',
+                    expand: true,
+                    flatten: true,
+                    ext: '.js'
+                }]
+            }
+        },
         copy: {
             dist: {
                 expand: true,
@@ -173,6 +184,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'jshint',
-        'build'
+        'build',
+        'uglify'
     ]);
 };
