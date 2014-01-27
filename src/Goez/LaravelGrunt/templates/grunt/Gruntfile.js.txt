@@ -170,6 +170,12 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('live', [
+        'jshint',
+        'build',
+        'watch'
+    ]);
+
     grunt.registerTask('server', [
         'jshint',
         'build',
