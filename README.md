@@ -1,6 +1,6 @@
 # Goez Laravel 4 + Grunt Asset Workflow
 
-*This package isn't stable for production. Testing and bug reporting are welcome.*
+*This package is no long being maintained!! Since discovering the Gulp task runner, and finding how easy it is to install, setup and use I've opted to drop GruntJS from my workflow.*
 
 ## Features
 
